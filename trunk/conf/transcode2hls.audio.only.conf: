@@ -1,0 +1,27 @@
+
+# conf/transcode2hls.audio.only.conf
+listen              1935;
+max_connections     1000;
+vhost __defaultVhost__ {
+    hls {
+        enabled         on;
+        hls_path        ./objs/nginx/html;
+        hls_fragment    10;
+        hls_window      60;
+    }
+    transcode {
+        enabled     on;
+        ffmpeg      ./objs/ffmpeg/bin/ffmpeg;
+        engine ff {
+            enabled         on;
+            vcodec          copy;
+            acodec          libfdk_aac;
+            abitrate        45;
+            asample_rate    44100;
+            achannels       2;
+            aparams {
+            }
+            output          rtmp://127.0.0.1:[port]/[app]?vhost=[vhost]/[stream]_[engine];
+        }
+    }
+}
